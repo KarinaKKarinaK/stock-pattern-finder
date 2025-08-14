@@ -7,6 +7,13 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import TimeSeriesSplit
 from sklearn.ensemble import RandomForestClassifier
 
+# For now this scaffold covers:
+
+# Label creation
+# Feature engineering
+# Model training and prediction
+# Backtesting logic
+
 def create_labels(df, horizon=5, threshold=0.015):
     pass
 
