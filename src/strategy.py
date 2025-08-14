@@ -6,3 +6,31 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import TimeSeriesSplit
 from sklearn.ensemble import RandomForestClassifier
+
+def create_labels(df, horizon=5, threshold=0.015):
+    pass
+
+def feature_engineering(df):
+    pass
+
+def compute_rsi(series, window=14):
+    pass
+
+def train_model(X, y):
+    pass
+
+def predict_signals(model, X, threshold=0.6):
+    pass
+
+def backtests(df, signals, horizon=5):
+    pass
+
+
+# The plan for how to use these:
+# df = create_labels(df)
+# df = feature_engineering(df)
+# X = df[['sma_5', 'sma_20', 'rsi_14']].dropna()
+# y = df['label'].dropna()
+# model = train_model(X, y)
+# signals, prob = predict_signals(model, X)
+# results = backtest(df, signals)
