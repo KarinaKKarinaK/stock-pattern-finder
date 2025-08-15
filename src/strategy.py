@@ -15,10 +15,15 @@ from sklearn.ensemble import RandomForestClassifier
 # Backtesting logic
 
 def create_labels(df, horizon=5, threshold=0.015):
-    pass
+    # Creating binary labels, returns 1 if teh forward return over the next [horizon] days is >= threshold, else 0
+    df = df.copy()
+    df['forward_return'] = df['close'].shift(-horizon) / df['close'] - 1
+    df['label'] = (df['forward_return'] >= threshold).astype(int)
+    return df
 
 def feature_engineering(df):
     pass
+
 
 def compute_rsi(series, window=14):
     pass
