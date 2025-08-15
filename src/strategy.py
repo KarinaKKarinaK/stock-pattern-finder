@@ -86,6 +86,8 @@ def backtest(df, signals, horizon=5):
 df = yf.download("AAPL", start="2022-01-01", end="2023-01-01")
 df = create_labels(df)
 df = feature_engineering(df)
+df.columns = [col[0] for col in df.columns]  # Flattens to 'Close', 'High', etc.
+print(df.columns)
 
 features = ['sma_5', 'sma_20', 'rsi_14']
 #dropna() removes rows/columns that contain Not a Number (NaN) values
