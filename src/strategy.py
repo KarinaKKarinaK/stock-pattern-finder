@@ -6,6 +6,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import TimeSeriesSplit
 from sklearn.ensemble import RandomForestClassifier
+import yfinance as yf
 
 # For now this scaffold covers:
 
@@ -64,7 +65,7 @@ def predict_signals(model, X, threshold=0.6):
     signals = (prob > threshold).astype(int)
     return signals, prob
 
-def backtests(df, signals, horizon=5):
+def backtest(df, signals, horizon=5):
     # Here I just simulate trading based on signals in order to evaluate the strategy's performance
     #How: for each signal, enter a trade and exit after the horizon, then calculate the return
     
@@ -82,10 +83,13 @@ def backtests(df, signals, horizon=5):
 
 
 # The plan for how to use these:
-# df = create_labels(df)
-# df = feature_engineering(df)
-# X = df[['sma_5', 'sma_20', 'rsi_14']].dropna()
-# y = df['label'].dropna()
-# model = train_model(X, y)
-# signals, prob = predict_signals(model, X)
-# results = backtest(df, signals)
+df = yf.download("AAPL", start="2022-01-01", end="2023-01-01")
+df = create_labels(df)
+df = feature_engineering(df)
+X = df[['sma_5', 'sma_20', 'rsi_14']].dropna()
+y = df['label'].dropna()
+model = train_model(X, y)
+signals, prob = predict_signals(model, X)
+results = backtest(df, signals)
+
+print(results)
