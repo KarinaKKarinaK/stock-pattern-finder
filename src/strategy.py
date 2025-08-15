@@ -101,3 +101,7 @@ signals, prob = predict_signals(model, X)
 results = backtest(df, signals)
 
 print(results)
+
+for result in results:
+    result = (result / 100)
+    print(f"Trade return: {result:.2%}")
