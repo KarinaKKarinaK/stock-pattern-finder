@@ -18,16 +18,16 @@ import yfinance as yf
 def create_labels(df, horizon=5, threshold=0.015):
     # Creating binary labels, returns 1 if teh forward return over the next [horizon] days is >= threshold, else 0
     df = df.copy()
-    df['forward_return'] = df['close'].shift(-horizon) / df['close'] - 1
+    df['forward_return'] = df['Close'].shift(-horizon) / df['Close'] - 1
     df['label'] = (df['forward_return'] >= threshold).astype(int)
     return df
 
 def feature_engineering(df):
     # Adding technical indictaors as teh features for the ML model
     df = df.copy()
-    df['sma_5'] = df['close'].rolling(window=5).mean()
-    df['sma_20'] = df['close'].rolling(window=20).mean()
-    df['rsi_14'] = compute_rsi(df['close'], window=14)
+    df['sma_5'] = df['Close'].rolling(window=5).mean()
+    df['sma_20'] = df['Close'].rolling(window=20).mean()
+    df['rsi_14'] = compute_rsi(df['Close'], window=14)
     return df
 
 
@@ -86,8 +86,14 @@ def backtest(df, signals, horizon=5):
 df = yf.download("AAPL", start="2022-01-01", end="2023-01-01")
 df = create_labels(df)
 df = feature_engineering(df)
-X = df[['sma_5', 'sma_20', 'rsi_14']].dropna()
-y = df['label'].dropna()
+
+features = ['sma_5', 'sma_20', 'rsi_14']
+#dropna() removes rows/columns that contain Not a Number (NaN) values
+df = df.dropna(subset=features + ['label'])  # Remove rows with missing feature or label values
+
+X = df[features]
+y = df['label']
+
 model = train_model(X, y)
 signals, prob = predict_signals(model, X)
 results = backtest(df, signals)
