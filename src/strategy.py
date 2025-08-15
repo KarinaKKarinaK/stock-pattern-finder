@@ -22,7 +22,12 @@ def create_labels(df, horizon=5, threshold=0.015):
     return df
 
 def feature_engineering(df):
-    pass
+    # Adding technical indictaors as teh features for the ML model
+    df = df.copy()
+    df['sma_5'] = df['close'].rolling(window=5).mean()
+    df['sma_20'] = df['close'].rolling(window=20).mean()
+    df['rsi_14'] = compute_rsi(df['close'], window=14)
+    return df
 
 
 def compute_rsi(series, window=14):
