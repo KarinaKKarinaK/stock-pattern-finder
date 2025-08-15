@@ -31,7 +31,13 @@ def feature_engineering(df):
 
 
 def compute_rsi(series, window=14):
-    pass
+    # Calculating RSI, teh realtiev STrength Index (this is a momentum indicator), 
+    # using price changes to compute the average gains/losses over a window tome frame
+    delta = series.diff()
+    gain = (delta.where(delta > 0, 0)).rolling(window=window).mean()
+    loss = (-delta.where(delta < 0, 0)).rolling(window=window).mean()
+    rs = gain / loss
+    return 100 - (100 / (1 + rs))
 
 def train_model(X, y):
     pass
