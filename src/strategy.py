@@ -40,7 +40,21 @@ def compute_rsi(series, window=14):
     return 100 - (100 / (1 + rs))
 
 def train_model(X, y):
-    pass
+    # Training a classifier using the scikit-learn pipeline; teh pipeline inclydes includes imputation (handling missing data), 
+    # scaling (normalizing features), and a classifier (Logistic Regression).
+    pipeline = Pipeline([
+        ('imputer', SimpleImputer()),
+        ('scaler', StandardScaler()),
+        ('classifier', LogisticRegression())
+    ])
+    # tscv = variable name for an instance of TimeSeriesSplit from the scikit-learn library
+    # TimeSeriesSplit is a cross-validation splitter designed for time series data, here I use 5 tiem splits
+    tscv = TimeSeriesSplit(n_splits=5)
+    
+    # Optionally add: cross-validation, hyperparameter tuning, etc.
+    pipeline.fit(X, y)
+    return pipeline
+
 
 def predict_signals(model, X, threshold=0.6):
     pass
