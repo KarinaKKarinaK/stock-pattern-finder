@@ -65,7 +65,20 @@ def predict_signals(model, X, threshold=0.6):
     return signals, prob
 
 def backtests(df, signals, horizon=5):
-    pass
+    # Here I just simulate trading based on signals in order to evaluate the strategy's performance
+    #How: for each signal, enter a trade and exit after the horizon, then calculate the return
+    
+    trades = []
+    
+    for i in range(len(signals)):
+        if signals[i] == 1:
+            entry_price = df['Close'].iloc[i]
+            if i + horizon < len(df):
+                exit_price = df['Close'].iloc[i + horizon]
+                ret = (exit_price - entry_price) - 1
+                trades.append(ret)
+
+    return trades
 
 
 # The plan for how to use these:
