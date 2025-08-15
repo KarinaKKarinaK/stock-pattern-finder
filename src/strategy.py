@@ -57,7 +57,12 @@ def train_model(X, y):
 
 
 def predict_signals(model, X, threshold=0.6):
-    pass
+    # Using the trained model to predict the probabilities for stocks each day;
+    # If a probability exceeds teh threshold (specified here as 0.6), then: generate "buy" signal
+    # Baiscally jsut converting the model's output into actionable trading signals to output on the app
+    prob = model.predict_proba(X)[:,1]
+    signals = (prob > threshold).astype(int)
+    return signals, prob
 
 def backtests(df, signals, horizon=5):
     pass
