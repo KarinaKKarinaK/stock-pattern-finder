@@ -7,6 +7,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import TimeSeriesSplit
 from sklearn.ensemble import RandomForestClassifier
 import yfinance as yf
+import matplotlib.pyplot as plt
 
 # For now this scaffold covers:
 
@@ -106,10 +107,24 @@ for result in results:
     result = (result / 100)
     print(f"Trade return: {result:.2%}")
 
-def start_analysis(results):
+def strategy_analysis(results):
     # Analyze returns (mean, median, win rate, etc.).
-    pass
+    mean = 0
+    for result in results:
+        result = (result / 100)
+        mean += result
+    mean /= len(results)
+    print(f"Mean trade return: {mean:.2%}")
 
 def visualize_returns(results):
     # Visualize them (histogram, cumulative return plot).
-    pass
+    plt.figure(figsize=(12, 6))
+    plt.hist(results, bins=30, alpha=0.7, color='blue')
+    plt.title('Trade Returns Distribution')
+    plt.xlabel('Return')
+    plt.ylabel('Frequency')
+    plt.grid()
+    plt.show()
+
+strategy_analysis(results)
+visualize_returns(results)
