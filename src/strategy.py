@@ -77,7 +77,7 @@ def backtest(df, signals, horizon=5):
             entry_price = df['Close'].iloc[i]
             if i + horizon < len(df):
                 exit_price = df['Close'].iloc[i + horizon]
-                ret = (exit_price - entry_price) - 1
+                ret = (exit_price / entry_price) - 1
                 trades.append(ret)
 
     return trades
@@ -104,14 +104,14 @@ results = backtest(df, signals)
 print(results)
 
 for result in results:
-    result = (result / 100)
+    # result = (result / 100)
     print(f"Trade return: {result:.2%}")
 
 def strategy_analysis(results):
     # Analyze returns (mean, median, win rate, etc.).
     mean = 0
     for result in results:
-        result = (result / 100)
+        # result = (result / 100)
         mean += result
     mean /= len(results)
     print(f"Mean trade return: {mean:.2%}")
