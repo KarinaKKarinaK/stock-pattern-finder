@@ -105,3 +105,11 @@ print(results)
 for result in results:
     result = (result / 100)
     print(f"Trade return: {result:.2%}")
+
+def start_analysis(results):
+    # Analyze returns (mean, median, win rate, etc.).
+    pass
+
+def visualize_returns(results):
+    # Visualize them (histogram, cumulative return plot).
+    pass
