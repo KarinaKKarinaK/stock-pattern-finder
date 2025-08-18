@@ -37,8 +37,8 @@ def feature_engineering(df):
 
     # Exponential Moving Average (EMA) = "a type of moving average that gives more weight to recent prices,
     #  making it more responsive to new information than the SMA"
-    df['ema_5'] = df['Close'].ewm(span=5, adjust=False).mean()
-    df['ema_20'] = df['Close'].ewm(span=20, adjust=False).mean()
+    df['ema_12'] = df['Close'].ewm(span=12, adjust=False).mean()
+    df['ema_26'] = df['Close'].ewm(span=26, adjust=False).mean()
 
     # MACD
     df['macd'] = df['ema_12'] - df['ema_26']
@@ -110,7 +110,8 @@ df = feature_engineering(df)
 df.columns = [col[0] for col in df.columns]  # Flattens to 'Close', 'High', etc.
 print(df.columns)
 
-features = ['sma_5', 'sma_20', 'rsi_14', 'ema_5', 'ema_20', 'bb_upper', 'bb_lower']
+# Add or subtract the indicators included in teh feature_engineering function as you see fit for highest returns
+features = ['sma_5', 'sma_20', 'rsi_14', 'macd', 'macd_signal']
 #dropna() removes rows/columns that contain Not a Number (NaN) values
 df = df.dropna(subset=features + ['label'])  # Remove rows with missing feature or label values
 
