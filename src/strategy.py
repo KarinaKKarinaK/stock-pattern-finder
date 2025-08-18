@@ -8,8 +8,8 @@ from sklearn.model_selection import TimeSeriesSplit
 from sklearn.ensemble import RandomForestClassifier
 import yfinance as yf
 import matplotlib.pyplot as plt
-import ta
-df = ta.add_all_ta_features(df, open="Open", high="High", low="Low", close="Close", volume="Volume", fillna=True)
+# import ta
+# df = ta.add_all_ta_features(df, open="Open", high="High", low="Low", close="Close", volume="Volume", fillna=True)
 # For now this scaffold covers:
 
 # Label creation
@@ -39,6 +39,10 @@ def feature_engineering(df):
     #  making it more responsive to new information than the SMA"
     df['ema_5'] = df['Close'].ewm(span=5, adjust=False).mean()
     df['ema_20'] = df['Close'].ewm(span=20, adjust=False).mean()
+
+    # MACD
+    df['macd'] = df['ema_12'] - df['ema_26']
+    df['macd_signal'] = df['macd'].ewm(span=9, adjust=False).mean()
 
     # Bollinger Bands
     df['bb_middle'] = df['Close'].rolling(window=20).mean()
@@ -106,7 +110,7 @@ df = feature_engineering(df)
 df.columns = [col[0] for col in df.columns]  # Flattens to 'Close', 'High', etc.
 print(df.columns)
 
-features = ['sma_5', 'sma_20', 'rsi_14']
+features = ['sma_5', 'sma_20', 'rsi_14', 'ema_5', 'ema_20', 'bb_upper', 'bb_lower']
 #dropna() removes rows/columns that contain Not a Number (NaN) values
 df = df.dropna(subset=features + ['label'])  # Remove rows with missing feature or label values
 
