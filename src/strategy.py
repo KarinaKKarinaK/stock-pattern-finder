@@ -111,6 +111,8 @@ df.columns = [col[0] for col in df.columns]  # Flattens to 'Close', 'High', etc.
 print(df.columns)
 
 # Add or subtract the indicators included in teh feature_engineering function as you see fit for highest returns
+
+# Add a feature to UI that allows the usre to modify which indicators to turn on and which to turn off
 features = ['sma_5', 'sma_20', 'rsi_14', 'macd', 'macd_signal']
 #dropna() removes rows/columns that contain Not a Number (NaN) values
 df = df.dropna(subset=features + ['label'])  # Remove rows with missing feature or label values
