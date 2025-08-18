@@ -8,7 +8,8 @@ from sklearn.model_selection import TimeSeriesSplit
 from sklearn.ensemble import RandomForestClassifier
 import yfinance as yf
 import matplotlib.pyplot as plt
-
+import ta
+df = ta.add_all_ta_features(df, open="Open", high="High", low="Low", close="Close", volume="Volume", fillna=True)
 # For now this scaffold covers:
 
 # Label creation
@@ -26,9 +27,24 @@ def create_labels(df, horizon=5, threshold=0.015):
 def feature_engineering(df):
     # Adding technical indictaors as teh features for the ML model
     df = df.copy()
+
+    # SImploe Moving Average (SMA)
     df['sma_5'] = df['Close'].rolling(window=5).mean()
     df['sma_20'] = df['Close'].rolling(window=20).mean()
+
+    # Relative Strength Index (RSI)
     df['rsi_14'] = compute_rsi(df['Close'], window=14)
+
+    # Exponential Moving Average (EMA) = "a type of moving average that gives more weight to recent prices,
+    #  making it more responsive to new information than the SMA"
+    df['ema_5'] = df['Close'].ewm(span=5, adjust=False).mean()
+    df['ema_20'] = df['Close'].ewm(span=20, adjust=False).mean()
+
+    # Bollinger Bands
+    df['bb_middle'] = df['Close'].rolling(window=20).mean()
+    df['bb_std'] = df['Close'].rolling(window=20).std()
+    df['bb_upper'] = df['bb_middle'] + 2 * df['bb_std']
+    df['bb_lower'] = df['bb_middle'] - 2 * df['bb_std']
     return df
 
 
