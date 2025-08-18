@@ -1,10 +1,15 @@
 from textblob import TextBlob
 import requests
 from config import NEWSAPI_KEY
+from newsapi import NewsApiClient
+from datetime import timedelta, date
+
+
+newsapi = NewsApiClient(api_key=NEWSAPI_KEY)
 
 # for this use a dictionary that looks like this: news_dict = {'2022-01-01': ['Apple launches new product', ...], ...}
 
-
+# Fetching news data =========================================
 def fetch_news_headlines(ticker, from_date, to_date, api_key):
     url = "https://newsapi.org/v2/everything"
     params = {
@@ -24,8 +29,6 @@ def fetch_news_headlines(ticker, from_date, to_date, api_key):
             headlines.append(article["title"])
     return headlines
 
-from datetime import timedelta, date
-
 def daterange(start_date, end_date):
     for n in range(int((end_date - start_date).days)):
         yield start_date + timedelta(n)
@@ -38,6 +41,7 @@ def build_news_dict(ticker, start_date, end_date, api_key):
         news_dict[date_str] = headlines
     return news_dict
 
+# Sentiment analysis =========================================
 def get_sentiment_score(text):
     return TextBlob(text).sentiment.polarity  # Range: [-1, 1]
 
@@ -48,8 +52,7 @@ def aggregate_daily_sentiment(news_dict):
         sentiment_by_date[date] = np.mean(scores) if scores else 0
     return sentiment_by_date
 
-api_key = NEWSAPI_KEY
 ticker = "AAPL"
 start_date = date(2022, 1, 1)
 end_date = date(2022, 1, 10)
-news_dict = build_news_dict(ticker, start_date, end_date, api_key)
+news_dict = build_news_dict(ticker, start_date, end_date, NEWSAPI_KEY)
