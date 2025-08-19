@@ -1,6 +1,9 @@
 import streamlit as st
 import pandas as pd
 import yfinance as yf
+from src.sentiment_analysis import build_news_dict, aggregate_daily_sentiment, sentiment_to_label
+from config import NEWSAPI_KEY
+from datetime import date
 
 st.title("Stock Pattern Finder")
 
