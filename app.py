@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import yfinance as yf
 from src.sentiment_analysis import build_news_dict, aggregate_daily_sentiment, sentiment_to_label
-from config import NEWSAPI_KEY
+from src.config import NEWSAPI_KEY
 from datetime import date
 
 st.title("Stock Pattern Finder")
@@ -42,6 +42,11 @@ if run_sentiment:
     st.line_chart(list(sentiment.values()))
     st.write("Buy/Hold/Sell signals by date:")
     st.table(sentiment_labels)
+
+    sentiment_series = pd.Series(sentiment)
+    sentiment_series.index = pd.to_datetime(sentiment_series.index)
+
+st.line_chart(sentiment_series)
 
 # st.sidebar.header("User Input")
 # ticker_symbol = st.sidebar.text_input("Ticker Symbol", "AAPL")

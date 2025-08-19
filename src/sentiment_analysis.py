@@ -1,7 +1,7 @@
 from textblob import TextBlob
 import requests
 import numpy as np
-from config import NEWSAPI_KEY
+from src.config import NEWSAPI_KEY
 from newsapi import NewsApiClient
 from datetime import timedelta, date
 
