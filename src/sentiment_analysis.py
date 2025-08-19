@@ -40,10 +40,19 @@ def aggregate_daily_sentiment(news_dict):
         sentiment_by_date[date] = np.mean(scores) if scores else 0
     return sentiment_by_date
 
+def sentiment_to_label(sentiment_score, buy_threshold=0.1, sell_threshold=-0.1):
+    if sentiment_score > buy_threshold:
+        return "buy"
+    elif sentiment_score < sell_threshold:
+        return "sell"
+    else:
+        return "hold"
+
 ticker = "MSFT"
 start_date = date(2025, 7, 20)
 end_date = date(2025, 8, 19)
 news_dict = build_news_dict(ticker, start_date, end_date, NEWSAPI_KEY)
 sentiment = aggregate_daily_sentiment(news_dict)
 
-print(sentiment)
+labeled_sentiment = {date: sentiment_to_label(score) for date, score in sentiment.items()}
+print(labeled_sentiment)
