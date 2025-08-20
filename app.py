@@ -5,6 +5,7 @@ from src.sentiment_analysis import build_news_dict, aggregate_daily_sentiment, s
 from src.config import NEWSAPI_KEY
 from datetime import date
 import matplotlib.pyplot as plt
+from src.strategy import create_labels, feature_engineering, train_model, predict_signals, backtest
 
 st.title("Stock Pattern Finder")
 
@@ -58,5 +59,36 @@ if run_sentiment:
     sentiment_series.index = pd.to_datetime(sentiment_series.index)
     st.line_chart(sentiment_series)
 
-    fig = visualize_returns(results)
-    st.pyplot(fig)
+
+st.sidebar.header("ML Strategy")
+ml_ticker = st.sidebar.text_input("ML Ticker Symbol", "AAPL", key="ml_ticker")
+ml_start_date = st.sidebar.date_input("ML Start Date", date(2022, 1, 1), key="ml_start")
+ml_end_date = st.sidebar.date_input("ML End Date", date(2023, 1, 1), key="ml_end")
+run_strategy = st.sidebar.button("Run ML Strategy")
+
+if run_strategy:
+    st.info(f"Running ML strategy for {ml_ticker} from {ml_start_date} to {ml_end_date}...")
+    df = yf.download(ml_ticker, start=ml_start_date, end=ml_end_date)
+    if df.empty:
+        st.error("No data found. Please check the ticker symbol and date range.")
+    else:
+        df = create_labels(df)
+        df = feature_engineering(df)
+        features = ['sma_5', 'sma_20', 'rsi_14', 'macd', 'macd_signal']
+        df = df.dropna(subset=features + ['label'])
+        X = df[features]
+        y = df['label']
+        model = train_model(X, y)
+        signals, prob = predict_signals(model, X)
+        results = backtest(df, signals)
+        st.write("Trade returns:", results)
+        st.write(f"Mean trade return: {pd.Series(results).mean():.2%}")
+        # Visualize returns
+        import matplotlib.pyplot as plt
+        fig, ax = plt.subplots(figsize=(12, 6))
+        ax.hist(results, bins=30, alpha=0.7, color='blue')
+        ax.set_title('Trade Returns Distribution')
+        ax.set_xlabel('Return')
+        ax.set_ylabel('Frequency')
+        ax.grid()
+        st.pyplot(fig)
