@@ -4,6 +4,7 @@ import yfinance as yf
 from src.sentiment_analysis import build_news_dict, aggregate_daily_sentiment, sentiment_to_label
 from src.config import NEWSAPI_KEY
 from datetime import date
+import matplotlib.pyplot as plt
 
 st.title("Stock Pattern Finder")
 
@@ -32,6 +33,16 @@ start_date = st.sidebar.date_input("Start Date", date(2025, 7, 20))
 end_date = st.sidebar.date_input("End Date", date(2025, 8, 19))
 run_sentiment = st.sidebar.button("Analyze Sentiment")
 
+def visualize_returns(results):
+    import matplotlib.pyplot as plt
+    fig, ax = plt.subplots(figsize=(12, 6))
+    ax.hist(results, bins=30, alpha=0.7, color='blue')
+    ax.set_title('Trade Returns Distribution')
+    ax.set_xlabel('Return')
+    ax.set_ylabel('Frequency')
+    ax.grid()
+    return fig
+
 if run_sentiment:
     st.info("Fetching news and analyzing sentiment...")
     news_dict = build_news_dict(ticker, start_date, end_date, NEWSAPI_KEY)
@@ -45,29 +56,7 @@ if run_sentiment:
 
     sentiment_series = pd.Series(sentiment)
     sentiment_series.index = pd.to_datetime(sentiment_series.index)
+    st.line_chart(sentiment_series)
 
-st.line_chart(sentiment_series)
-
-# st.sidebar.header("User Input")
-# ticker_symbol = st.sidebar.text_input("Ticker Symbol", "AAPL")
-# if ticker_symbol not in yf.Ticker(ticker_symbol).info:
-#     st.error("Invalid ticker symbol.")
-#     st.stop()
-
-# date_range = st.sidebar.date_input("Date Range", [pd.to_datetime("2020-01-01"), pd.to_datetime("2023-01-01")])
-# fetch_data_btn = st.sidebar.button("Fetch Data")
-
-
-# if fetch_data_btn:
-#     start_date = pd.to_datetime(date_range[0])
-#     end_date = pd.to_datetime(date_range[1])
-#     df = yf.download(ticker_symbol, start=start_date, end=end_date)
-#     df = yf.download(ticker_symbol, start=start_date, end=end_date)
-#     if df.empty:
-#         st.error("No data found. Please check the ticker symbol and date range.")
-#     else:
-#         st.write(f"Fetching data for {ticker_symbol} from {date_range[0]} to {date_range[1]}")
-#         st.dataframe(df)
-#         st.line_chart(df['Close'])
-
-st.pyplot()
+    fig = visualize_returns(results)
+    st.pyplot(fig)
