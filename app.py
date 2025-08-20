@@ -7,7 +7,7 @@ from datetime import date
 
 st.title("Stock Pattern Finder")
 
-st.header("Welcome! This app helps you find stock patterns in historical data.")
+st.header("Welcome :) This app helps you find stock patterns in historical data.")
 
 st.subheader("Instructions")
 
