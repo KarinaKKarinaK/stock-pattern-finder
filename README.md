@@ -40,3 +40,8 @@
 ### Model Interpretation:
 
 - Techniques like permutation importance and partial dependence profiles to understand feature impact.
+
+
+## Sentiment Analysis
+- Using newsapi to fetch news headlines in a given timeframe
+- Using textblob for sentiment analysis of the news
