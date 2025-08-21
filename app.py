@@ -6,6 +6,10 @@ from src.config import NEWSAPI_KEY
 from datetime import date
 import matplotlib.pyplot as plt
 from src.strategy import create_labels, feature_engineering, train_model, predict_signals, backtest
+import datetime
+
+today = datetime.date.today()
+min_date = today - datetime.timedelta(days=30)
 
 st.title("Stock Pattern Finder")
 
@@ -30,8 +34,8 @@ Use the sidebar to adjust your inputs. Results and charts will appear here!
 
 st.sidebar.header("Sentiment Analysis")
 ticker = st.sidebar.text_input("Ticker Symbol", "AAPL")
-start_date = st.sidebar.date_input("Start Date", date(2025, 7, 20))
-end_date = st.sidebar.date_input("End Date", date(2025, 8, 19))
+start_date = st.sidebar.date_input("Start Date", min_value=min_date, max_value=today, value=min_date)
+end_date = st.sidebar.date_input("End Date", min_value=min_date, max_value=today, value=today)
 run_sentiment = st.sidebar.button("Analyze Sentiment")
 
 def visualize_returns(results):
@@ -45,15 +49,19 @@ def visualize_returns(results):
     return fig
 
 if run_sentiment:
-    st.info("Fetching news and analyzing sentiment...")
-    news_dict = build_news_dict(ticker, start_date, end_date, NEWSAPI_KEY)
-    sentiment = aggregate_daily_sentiment(news_dict)
-    sentiment_labels = {d: sentiment_to_label(s) for d, s in sentiment.items()}
-    st.write("Daily Sentiment Scores:", sentiment)
-    st.write("Daily Sentiment Labels:", sentiment_labels)
-    st.line_chart(list(sentiment.values()))
-    st.write("Buy/Hold/Sell signals by date:")
-    st.table(sentiment_labels)
+    if start_date < min_date or end_date > today:
+        st.error(f"Please select dates between {min_date} and {today} (NewsAPI free plan limit).")
+    else:
+        news_dict = build_news_dict(ticker, start_date, end_date, NEWSAPI_KEY)
+        st.info("Fetching news and analyzing sentiment...")
+        news_dict = build_news_dict(ticker, start_date, end_date, NEWSAPI_KEY)
+        sentiment = aggregate_daily_sentiment(news_dict)
+        sentiment_labels = {d: sentiment_to_label(s) for d, s in sentiment.items()}
+        st.write("Daily Sentiment Scores:", sentiment)
+        st.write("Daily Sentiment Labels:", sentiment_labels)
+        st.line_chart(list(sentiment.values()))
+        st.write("Buy/Hold/Sell signals by date:")
+        st.table(sentiment_labels)
 
     sentiment_series = pd.Series(sentiment)
     sentiment_series.index = pd.to_datetime(sentiment_series.index)
@@ -62,8 +70,8 @@ if run_sentiment:
 
 st.sidebar.header("ML Strategy")
 ml_ticker = st.sidebar.text_input("ML Ticker Symbol", "AAPL", key="ml_ticker")
-ml_start_date = st.sidebar.date_input("ML Start Date", date(2022, 1, 1), key="ml_start")
-ml_end_date = st.sidebar.date_input("ML End Date", date(2023, 1, 1), key="ml_end")
+ml_start_date = st.sidebar.date_input("ML Start Date", date(2025, 7, 21), key="ml_start")
+ml_end_date = st.sidebar.date_input("ML End Date", date(2025, 8, 19), key="ml_end")
 run_strategy = st.sidebar.button("Run ML Strategy")
 
 if run_strategy:
@@ -99,4 +107,4 @@ if run_strategy:
         st.pyplot(fig)
 
 
-        df = yf.download("AAPL", start="2022-01-01", end="2023-01-01")
+        # df = yf.download("AAPL", start="2022-01-01", end="2023-01-01")
