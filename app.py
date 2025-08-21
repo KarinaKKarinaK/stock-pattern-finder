@@ -74,10 +74,15 @@ if run_strategy:
     else:
         df = create_labels(df)
         df = feature_engineering(df)
+        if isinstance(df.columns, pd.MultiIndex):
+            df.columns = [col[0] for col in df.columns]
+        print(df.columns)
         features = ['sma_5', 'sma_20', 'rsi_14', 'macd', 'macd_signal']
-        df = df.dropna(subset=features + ['label'])
+        df = df.dropna(subset=features + ['label'])  # Remove rows with missing feature or label values
+
         X = df[features]
         y = df['label']
+
         model = train_model(X, y)
         signals, prob = predict_signals(model, X)
         results = backtest(df, signals)
@@ -92,3 +97,6 @@ if run_strategy:
         ax.set_ylabel('Frequency')
         ax.grid()
         st.pyplot(fig)
+
+
+        df = yf.download("AAPL", start="2022-01-01", end="2023-01-01")
