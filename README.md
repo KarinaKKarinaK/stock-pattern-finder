@@ -1,3 +1,10 @@
+# Features
+- Stock price pattern detection using ML (Logistic Regression, Random Forest, etc.)
+- Technical indicators: SMA, EMA, MACD, RSI, Bollinger Bands
+- Backtesting with realistic trading rules (transaction costs, stop-loss, take-profit)
+- Sentiment analysis from news headlines (NewsAPI + TextBlob)
+- Streamlit web interface for interactive analysis
+
 # Pattern Recognition Strategy (ML)
 ## Supervised “is this a good entry now?”
 
