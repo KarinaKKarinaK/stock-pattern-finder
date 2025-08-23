@@ -9,7 +9,7 @@ from src.strategy import create_labels, feature_engineering, train_model, predic
 import datetime
 
 today = datetime.date.today()
-min_date = today - datetime.timedelta(days=30)
+min_date = datetime.date(2025, 7, 22)
 
 st.title("Stock Pattern Finder")
 
