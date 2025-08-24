@@ -48,23 +48,26 @@ def visualize_returns(results):
     ax.grid()
     return fig
 
+start_date_str = max(start_date, min_date).strftime("%Y-%m-%d")
+end_date_str = min(end_date, today).strftime("%Y-%m-%d")
+
 if run_sentiment:
     if start_date < min_date or end_date > today:
         st.warning(f"Dates adjusted to NewsAPI free plan limits: {min_date} to {today}")
-    news_dict = build_news_dict(ticker, start_date_str, end_date_str, NEWSAPI_KEY)
-    st.info("Fetching news and analyzing sentiment...")
-    news_dict = build_news_dict(ticker, start_date, end_date, NEWSAPI_KEY)
-    sentiment = aggregate_daily_sentiment(news_dict)
-    sentiment_labels = {d: sentiment_to_label(s) for d, s in sentiment.items()}
-    st.write("Daily Sentiment Scores:", sentiment)
-    st.write("Daily Sentiment Labels:", sentiment_labels)
-    st.line_chart(list(sentiment.values()))
-    st.write("Buy/Hold/Sell signals by date:")
-    st.table(sentiment_labels)
-
-    sentiment_series = pd.Series(sentiment)
-    sentiment_series.index = pd.to_datetime(sentiment_series.index)
-    st.line_chart(sentiment_series)
+    try:
+        st.info("Fetching news and analyzing sentiment...")
+        news_dict = build_news_dict(ticker, start_date_str, end_date_str, NEWSAPI_KEY)
+        sentiment = aggregate_daily_sentiment(news_dict)
+        sentiment_labels = {d: sentiment_to_label(s) for d, s in sentiment.items()}
+        st.write("Daily Sentiment Scores:", sentiment)
+        st.write("Daily Sentiment Labels:", sentiment_labels)
+        sentiment_series = pd.Series(sentiment)
+        sentiment_series.index = pd.to_datetime(sentiment_series.index)
+        st.line_chart(sentiment_series)
+        st.write("Buy/Hold/Sell signals by date:")
+        st.table(sentiment_labels)
+    except Exception as e:
+        st.warning(f"NewsAPI error: {e}. Sentiment analysis is unavailable for the selected dates.")
 
 
 st.sidebar.header("ML Strategy")
