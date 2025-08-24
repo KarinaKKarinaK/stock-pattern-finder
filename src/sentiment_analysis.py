@@ -22,6 +22,11 @@ def daterange(start_date, end_date):
         yield start_date + timedelta(n)
 
 def build_news_dict(ticker, start_date, end_date, api_key):
+    # Ensure start_date and end_date are date objects
+    if isinstance(start_date, str):
+        start_date = date.strptime(start_date, "%Y-%m-%d").date()
+    if isinstance(end_date, str):
+        end_date = date.strptime(end_date, "%Y-%m-%d").date()
     # Clamp start_date to min_date
     min_date = date(2025, 7, 23)  # Update as needed
     news_dict = {}
