@@ -3,7 +3,7 @@ import requests
 import numpy as np
 from src.config import NEWSAPI_KEY
 from newsapi import NewsApiClient
-from datetime import timedelta, date
+from datetime import timedelta, date, datetime
 
 
 newsapi = NewsApiClient(api_key=NEWSAPI_KEY)
@@ -22,8 +22,12 @@ def daterange(start_date, end_date):
         yield start_date + timedelta(n)
 
 def build_news_dict(ticker, start_date, end_date, api_key):
+    # Clamp start_date to min_date
+    min_date = datetime.date(2025, 7, 23)  # Update as needed
     news_dict = {}
     for single_date in daterange(start_date, end_date):
+        if single_date < min_date:
+            continue  # Skip dates before allowed minimum
         date_str = single_date.strftime("%Y-%m-%d")
         headlines = fetch_news_headlines(ticker, date_str, date_str, api_key)
         news_dict[date_str] = headlines

@@ -8,9 +8,6 @@ import matplotlib.pyplot as plt
 from src.strategy import create_labels, feature_engineering, train_model, predict_signals, backtest
 import datetime
 
-today = datetime.date.today()
-min_date = datetime.date(2025, 7, 22)
-
 st.title("Stock Pattern Finder")
 
 st.header("Welcome :) This app helps you find stock patterns in historical data.")
@@ -48,19 +45,21 @@ def visualize_returns(results):
     ax.grid()
     return fig
 
+today = datetime.date.today()
+min_date = datetime.date(2025, 7, 23)  # Update this if NewsAPI error message changes
+
+start_date = st.sidebar.date_input("Start Date", min_value=min_date, max_value=today, value=min_date)
+end_date = st.sidebar.date_input("End Date", min_value=min_date, max_value=today, value=today)
+
 start_date_str = max(start_date, min_date).strftime("%Y-%m-%d")
 end_date_str = min(end_date, today).strftime("%Y-%m-%d")
 
 if run_sentiment:
-    if start_date < min_date or end_date > today:
-        st.warning(f"Dates adjusted to NewsAPI free plan limits: {min_date} to {today}")
     try:
         st.info("Fetching news and analyzing sentiment...")
         news_dict = build_news_dict(ticker, start_date_str, end_date_str, NEWSAPI_KEY)
         sentiment = aggregate_daily_sentiment(news_dict)
         sentiment_labels = {d: sentiment_to_label(s) for d, s in sentiment.items()}
-        st.write("Daily Sentiment Scores:", sentiment)
-        st.write("Daily Sentiment Labels:", sentiment_labels)
         sentiment_series = pd.Series(sentiment)
         sentiment_series.index = pd.to_datetime(sentiment_series.index)
         st.line_chart(sentiment_series)
@@ -68,7 +67,6 @@ if run_sentiment:
         st.table(sentiment_labels)
     except Exception as e:
         st.warning(f"NewsAPI error: {e}. Sentiment analysis is unavailable for the selected dates.")
-
 
 st.sidebar.header("ML Strategy")
 ml_ticker = st.sidebar.text_input("ML Ticker Symbol", "AAPL", key="ml_ticker")
