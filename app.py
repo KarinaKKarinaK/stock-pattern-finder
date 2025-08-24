@@ -30,9 +30,12 @@ Use the sidebar to adjust your inputs. Results and charts will appear here!
 today = datetime.date.today()
 min_date = datetime.date(2025, 7, 24)  # Update this if NewsAPI error message changes
 
-start_date = st.sidebar.date_input("Start Date", min_value=min_date, max_value=today, value=min_date)
-end_date = st.sidebar.date_input("End Date", min_value=min_date, max_value=today, value=today)
-
+start_date = st.sidebar.date_input(
+    "Start Date", min_value=min_date, max_value=today, value=min_date, key="start_date"
+)
+end_date = st.sidebar.date_input(
+    "End Date", min_value=min_date, max_value=today, value=today, key="end_date"
+)
 start_date_str = max(start_date, min_date).strftime("%Y-%m-%d")
 end_date_str = min(end_date, today).strftime("%Y-%m-%d")
 
