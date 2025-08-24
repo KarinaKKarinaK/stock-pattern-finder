@@ -3,7 +3,7 @@ import requests
 import numpy as np
 from src.config import NEWSAPI_KEY
 from newsapi import NewsApiClient
-from datetime import timedelta, date, datetime
+from datetime import timedelta, date
 
 
 newsapi = NewsApiClient(api_key=NEWSAPI_KEY)
@@ -23,7 +23,7 @@ def daterange(start_date, end_date):
 
 def build_news_dict(ticker, start_date, end_date, api_key):
     # Clamp start_date to min_date
-    min_date = datetime.date(2025, 7, 23)  # Update as needed
+    min_date = date(2025, 7, 23)  # Update as needed
     news_dict = {}
     for single_date in daterange(start_date, end_date):
         if single_date < min_date:
@@ -53,7 +53,7 @@ def sentiment_to_label(sentiment_score, buy_threshold=0.1, sell_threshold=-0.1):
         return "hold"
 
 ticker = "MSFT"
-start_date = date(2025, 7, 20)
+start_date = date(2025, 7, 24)
 end_date = date(2025, 8, 19)
 news_dict = build_news_dict(ticker, start_date, end_date, NEWSAPI_KEY)
 sentiment = aggregate_daily_sentiment(news_dict)

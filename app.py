@@ -27,7 +27,14 @@ Welcome! This app helps you analyze historical stock price data and discover pat
 
 Use the sidebar to adjust your inputs. Results and charts will appear here!
 """)
+today = datetime.date.today()
+min_date = datetime.date(2025, 7, 24)  # Update this if NewsAPI error message changes
 
+start_date = st.sidebar.date_input("Start Date", min_value=min_date, max_value=today, value=min_date)
+end_date = st.sidebar.date_input("End Date", min_value=min_date, max_value=today, value=today)
+
+start_date_str = max(start_date, min_date).strftime("%Y-%m-%d")
+end_date_str = min(end_date, today).strftime("%Y-%m-%d")
 
 st.sidebar.header("Sentiment Analysis")
 ticker = st.sidebar.text_input("Ticker Symbol", "AAPL")
@@ -45,14 +52,6 @@ def visualize_returns(results):
     ax.grid()
     return fig
 
-today = datetime.date.today()
-min_date = datetime.date(2025, 7, 23)  # Update this if NewsAPI error message changes
-
-start_date = st.sidebar.date_input("Start Date", min_value=min_date, max_value=today, value=min_date)
-end_date = st.sidebar.date_input("End Date", min_value=min_date, max_value=today, value=today)
-
-start_date_str = max(start_date, min_date).strftime("%Y-%m-%d")
-end_date_str = min(end_date, today).strftime("%Y-%m-%d")
 
 if run_sentiment:
     try:
