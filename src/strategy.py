@@ -59,6 +59,19 @@ def feature_engineering(df):
     tr3 = (low - close.shift(1)).abs()
     df['TR'] = pd.concat([tr1, tr2, tr3], axis=1).max(axis=1)
     df['ATR14'] = df['TR'].rolling(14).mean().shift(1)
+
+    # Stochastic Oscillator
+    low_min = df['Low'].rolling(14).min()
+    high_max = df['High'].rolling(14).max()
+    df['%K'] = 100 * (df['Close'] - low_min) / (high_max - low_min)
+    df['%D'] = df['%K'].rolling(3).mean()
+
+    # VWAP (Volume Weighted Average Price)
+    df['VWAP'] = (df['Close'] * df['Volume']).cumsum() / df['Volume'].cumsum()
+
+    # ROlling Volatility
+    df['RollingVol20'] = df['Close'].pct_change().rolling(20).std().shift(1)
+
     return df
 
 
