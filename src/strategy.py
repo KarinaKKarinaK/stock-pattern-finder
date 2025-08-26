@@ -63,22 +63,22 @@ def feature_engineering(df):
     # Stochastic Oscillator
     low_min = df['Low'].rolling(14).min()
     high_max = df['High'].rolling(14).max()
-    df['%K'] = 100 * (df['Close'] - low_min) / (high_max - low_min)
-    df['%D'] = df['%K'].rolling(3).mean()
+    df['stoch_k'] = 100 * (df['Close'] - low_min) / (high_max - low_min)
+    df['stoch_d'] = df['stoch_k'].rolling(3).mean()
 
     # VWAP (Volume Weighted Average Price)
     df['VWAP'] = (df['Close'] * df['Volume']).cumsum() / df['Volume'].cumsum()
 
-    # ROlling Volatility
-    df['RollingVol20'] = df['Close'].pct_change().rolling(20).std().shift(1)
+    # RRolling Volatility
+    df['rolling_vol20'] = df['Close'].pct_change().rolling(20).std().shift(1)
 
     # Volume Z-Score:
     vol_mean = df['Volume'].rolling(20).mean()
     vol_std = df['Volume'].rolling(20).std()
-    df['VolumeZ'] = (df['Volume'] - vol_mean) / vol_std
+    df['volume_z'] = (df['Volume'] - vol_mean) / vol_std
 
     # Rate of Change (Momentum):
-    df['ROC5'] = df['Close'].pct_change(5).shift(1)
+    df['roc5'] = df['Close'].pct_change(5).shift(1)
 
     return df
 
@@ -144,7 +144,7 @@ print(df.columns)
 # Add or subtract the indicators included in teh feature_engineering function as you see fit for highest returns
 
 # Add a feature to UI that allows the usre to modify which indicators to turn on and which to turn off
-features = ['sma_5', 'sma_20', 'rsi_14', 'macd', 'macd_signal']
+features = ['sma_5', 'sma_20', 'rsi_14', 'macd', 'macd_signal', 'stoch_k', 'stoch_d', 'VWAP', 'rolling_vol20', 'volume_z', 'roc5']
 #dropna() removes rows/columns that contain Not a Number (NaN) values
 df = df.dropna(subset=features + ['label'])  # Remove rows with missing feature or label values
 
