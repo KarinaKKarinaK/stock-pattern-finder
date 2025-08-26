@@ -72,6 +72,14 @@ def feature_engineering(df):
     # ROlling Volatility
     df['RollingVol20'] = df['Close'].pct_change().rolling(20).std().shift(1)
 
+    # Volume Z-Score:
+    vol_mean = df['Volume'].rolling(20).mean()
+    vol_std = df['Volume'].rolling(20).std()
+    df['VolumeZ'] = (df['Volume'] - vol_mean) / vol_std
+
+    # Rate of Change (Momentum):
+    df['ROC5'] = df['Close'].pct_change(5).shift(1)
+
     return df
 
 
