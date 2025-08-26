@@ -49,6 +49,16 @@ def feature_engineering(df):
     df['bb_std'] = df['Close'].rolling(window=20).std()
     df['bb_upper'] = df['bb_middle'] + 2 * df['bb_std']
     df['bb_lower'] = df['bb_middle'] - 2 * df['bb_std']
+
+    # ATR (Average True Range, window=14)
+    high = df['High']
+    low = df['Low']
+    close = df['Close']
+    tr1 = high - low
+    tr2 = (high - close.shift(1)).abs()
+    tr3 = (low - close.shift(1)).abs()
+    df['TR'] = pd.concat([tr1, tr2, tr3], axis=1).max(axis=1)
+    df['ATR14'] = df['TR'].rolling(14).mean().shift(1)
     return df
 
 
