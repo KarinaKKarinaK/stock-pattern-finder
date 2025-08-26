@@ -21,6 +21,14 @@
 
 **Outputs I'm using:** probability/score per day → **convert to trades** with simple rules (e.g., score > 0.6 enter long; stop/TP rules; max concurrent positions = 1 for MVP).
 
+# Feature Engineering Rules/ Guiding Principles:
+
+The features must be:
+- Predictive (contain information about future returns)
+- Available in real-time (no lookahead bias — always shift by +1 bar)
+- Stable/out-of-sample robust (not just fit noise in history)
+
+-> Rule: Only including indicators that can be computed from past and present data, never future.
 
 # Thsi project fetaures teh following ML techniques:
 
