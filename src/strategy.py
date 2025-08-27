@@ -17,7 +17,7 @@ import matplotlib.pyplot as plt
 # Model training and prediction
 # Backtesting logic
 
-def create_labels(df, horizon=5, threshold=0.015):
+def create_labels(df, horizon=5, threshold=0.005):
     # Creating binary labels, returns 1 if teh forward return over the next [horizon] days is >= threshold, else 0
     df = df.copy()
     df['forward_return'] = df['Close'].shift(-horizon) / df['Close'] - 1
@@ -103,9 +103,18 @@ def train_model(X, y):
     # tscv = variable name for an instance of TimeSeriesSplit from the scikit-learn library
     # TimeSeriesSplit is a cross-validation splitter designed for time series data, here I use 5 tiem splits
     tscv = TimeSeriesSplit(n_splits=5)
+
+    # Check if y contains at least two classes
+    if len(np.unique(y)) < 2:
+        print("Error: Not enough classes in labels to train a classifier. Found only:", np.unique(y))
+        # Optionally, handle this case (skip training, adjust data, etc.)
+    else:
+        # Optionally add: cross-validation, hyperparameter tuning, etc
+        pipeline.fit(X, y)
+
+    print("Label distribution:", np.unique(y, return_counts=True))
     
-    # Optionally add: cross-validation, hyperparameter tuning, etc.
-    pipeline.fit(X, y)
+
     return pipeline
 
 
