@@ -57,6 +57,29 @@ The features must be:
 - Techniques like permutation importance and partial dependence profiles to understand feature impact.
 
 
+
+## Feature Engineering Function
+
+The `feature_engineering` function in `src/strategy.py` automatically generates a rich set of technical indicators from your stock price data. These features are designed to help machine learning models identify patterns and make predictions about future price movements.
+
+**What it does:**
+- Computes moving averages (SMA, EMA) for trend detection.
+- Calculates Relative Strength Index (RSI) for momentum analysis.
+- Derives MACD and its signal line for trend and momentum.
+- Adds Bollinger Bands for volatility and price extremes.
+- Computes Average True Range (ATR) for volatility measurement.
+- Generates Stochastic Oscillator values for overbought/oversold signals.
+- Calculates VWAP for average price weighted by volume.
+- Adds rolling volatility and volume z-score for market activity.
+- Computes Rate of Change (ROC) for momentum.
+
+**How it works:**
+- All indicators are calculated using only past and present data (no lookahead bias).
+- Each feature is added as a new column to your DataFrame.
+- The function is used as a preprocessing step before model training, ensuring that all relevant technical signals are available for the ML pipeline.
+
+---
+
 ## Sentiment Analysis
 - Using newsapi to fetch news headlines in a given timeframe
 - Using textblob for sentiment analysis of the news
