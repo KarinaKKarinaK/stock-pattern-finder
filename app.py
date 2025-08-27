@@ -3,7 +3,7 @@ import pandas as pd
 import yfinance as yf
 from src.sentiment_analysis import build_news_dict, aggregate_daily_sentiment, sentiment_to_label
 from src.config import NEWSAPI_KEY
-from datetime import date
+from datetime import date, timedelta
 import matplotlib.pyplot as plt
 from src.strategy import create_labels, feature_engineering, train_model, predict_signals, backtest
 import datetime
@@ -28,7 +28,7 @@ Welcome! This app helps you analyze historical stock price data and discover pat
 Use the sidebar to adjust your inputs. Results and charts will appear here!
 """)
 today = datetime.date.today()
-min_date = datetime.date(2025, 7, 24)  # Update this if NewsAPI error message changes
+min_date = today - timedelta(days=28)  # Update this if NewsAPI error message changes
 
 start_date = st.sidebar.date_input(
     "Start Date", min_value=min_date, max_value=today, value=min_date, key="start_date"

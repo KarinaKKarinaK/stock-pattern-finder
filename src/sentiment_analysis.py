@@ -58,9 +58,11 @@ def sentiment_to_label(sentiment_score, buy_threshold=0.1, sell_threshold=-0.1):
         return "hold"
 
 ticker = "MSFT"
-start_date = date(2025, 7, 24)
-end_date = date(2025, 8, 19)
-news_dict = build_news_dict(ticker, start_date, end_date, NEWSAPI_KEY)
+today = datetime.today()
+start_date = today - timedelta(days=28)
+start_date_str = start_date.strftime('%Y-%m-%d')  # Format as 'YYYY-MM-DD' for NewsAPI
+end_date_str = today.strftime('%Y-%m-%d')  # Format as 'YYYY-MM-DD' for NewsAPI
+news_dict = build_news_dict(ticker, start_date_str, end_date_str, NEWSAPI_KEY)
 sentiment = aggregate_daily_sentiment(news_dict)
 
 labeled_sentiment = {date: sentiment_to_label(score) for date, score in sentiment.items()}
