@@ -57,8 +57,7 @@ The features must be:
 - Techniques like permutation importance and partial dependence profiles to understand feature impact.
 
 
-
-## Feature Engineering Function
+## The Feature Engineering Function
 
 The `feature_engineering` function in `src/strategy.py` automatically generates a rich set of technical indicators from your stock price data. These features are designed to help machine learning models identify patterns and make predictions about future price movements.
 
@@ -77,8 +76,6 @@ The `feature_engineering` function in `src/strategy.py` automatically generates 
 - All indicators are calculated using only past and present data (no lookahead bias).
 - Each feature is added as a new column to your DataFrame.
 - The function is used as a preprocessing step before model training, ensuring that all relevant technical signals are available for the ML pipeline.
-
----
 
 ## Sentiment Analysis
 - Using newsapi to fetch news headlines in a given timeframe
