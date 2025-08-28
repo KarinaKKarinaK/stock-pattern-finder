@@ -4,6 +4,7 @@ import numpy as np
 from src.config import NEWSAPI_KEY
 from newsapi import NewsApiClient
 from datetime import timedelta, date, datetime
+import streamlit as st
 
 
 newsapi = NewsApiClient(api_key=NEWSAPI_KEY)
@@ -57,13 +58,17 @@ def sentiment_to_label(sentiment_score, buy_threshold=0.1, sell_threshold=-0.1):
     else:
         return "hold"
 
-ticker = "MSFT"
-today = datetime.today()
-start_date = today - timedelta(days=28)
-start_date_str = start_date.strftime('%Y-%m-%d')  # Format as 'YYYY-MM-DD' for NewsAPI
-end_date_str = today.strftime('%Y-%m-%d')  # Format as 'YYYY-MM-DD' for NewsAPI
-news_dict = build_news_dict(ticker, start_date_str, end_date_str, NEWSAPI_KEY)
-sentiment = aggregate_daily_sentiment(news_dict)
 
-labeled_sentiment = {date: sentiment_to_label(score) for date, score in sentiment.items()}
-print(labeled_sentiment)
+try:
+    ticker = "MSFT"
+    today = datetime.today()
+    start_date = today - timedelta(days=28)
+    start_date_str = start_date.strftime('%Y-%m-%d')  # Format as 'YYYY-MM-DD' for NewsAPI
+    end_date_str = today.strftime('%Y-%m-%d')  # Format as 'YYYY-MM-DD' for NewsAPI
+    news_dict = build_news_dict(ticker, start_date_str, end_date_str, NEWSAPI_KEY)
+    sentiment = aggregate_daily_sentiment(news_dict)
+    labeled_sentiment = {date: sentiment_to_label(score) for date, score in sentiment.items()}
+    print(labeled_sentiment)
+except Exception:
+    st.error("Your free uses of NewsAPI have run out or you have hit the rate limit. Please upgrade your NewsAPI plan or try again later.")
+    # Do not re-raise or print the exception
