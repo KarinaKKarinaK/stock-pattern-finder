@@ -61,14 +61,16 @@ if run_sentiment:
         st.info("Fetching news and analyzing sentiment...")
         news_dict = build_news_dict(ticker, start_date_str, end_date_str, NEWSAPI_KEY)
         sentiment = aggregate_daily_sentiment(news_dict)
-        sentiment_labels = {d: sentiment_to_label(s) for d, s in sentiment.items()}
+        labeled_sentiment = {date: sentiment_to_label(score) for date, score in sentiment.items()}
         sentiment_series = pd.Series(sentiment)
         sentiment_series.index = pd.to_datetime(sentiment_series.index)
         st.line_chart(sentiment_series)
         st.write("Buy/Hold/Sell signals by date:")
-        st.table(sentiment_labels)
+        st.table(labeled_sentiment)
+        # print(labeled_sentiment)
     except Exception as e:
-        st.warning(f"NewsAPI error: {e}. Sentiment analysis is unavailable for the selected dates.")
+        st.error("Your free uses of NewsAPI have run out or you have hit the rate limit. Please upgrade your NewsAPI plan or try again later.")
+        st.error(f"Details: {e}")
 
 st.sidebar.header("ML Strategy")
 ml_ticker = st.sidebar.text_input("ML Ticker Symbol", "AAPL", key="ml_ticker")
