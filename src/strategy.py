@@ -8,6 +8,7 @@ from sklearn.model_selection import TimeSeriesSplit
 from sklearn.ensemble import RandomForestClassifier
 import yfinance as yf
 import matplotlib.pyplot as plt
+import pandas_ta as ta
 # import ta
 # df = ta.add_all_ta_features(df, open="Open", high="High", low="Low", close="Close", volume="Volume", fillna=True)
 # For now this scaffold covers:
@@ -23,6 +24,14 @@ def create_labels(df, horizon=5, threshold=0.005):
     df['forward_return'] = df['Close'].shift(-horizon) / df['Close'] - 1
     df['label'] = (df['forward_return'] >= threshold).astype(int)
     return df
+
+# Williams %R - Similar to Stochastic, shows overbought/oversold.
+# How to calculate: (Highest High - Close) / (Highest High - Lowest Low) * -100
+def williams_r(df, period=14):
+    high = df['High'].rolling(window=period).max()
+    low = df['Low'].rolling(window=period).min()
+    wr = (high - df['Close']) / (high - low) * -100
+    return wr
 
 def feature_engineering(df):
     # Adding technical indictaors as teh features for the ML model
@@ -79,6 +88,15 @@ def feature_engineering(df):
 
     # Rate of Change (Momentum):
     df['roc5'] = df['Close'].pct_change(5).shift(1)
+
+    # WIlliams R%
+    df['Williams_%R'] = williams_r(df)
+
+    # Candle Patterns
+    # Doji, Hammer, Engulfing patterns as binary features
+    df['Doji'] = ta.cdl_doji(df['Open'], df['High'], df['Low'], df['Close'])
+    df['Hammer'] = ta.cdl_hammer(df['Open'], df['High'], df['Low'], df['Close'])
+    df['Engulfing'] = ta.cdl_engulfing(df['Open'], df['High'], df['Low'], df['Close'])
 
     return df
 
@@ -153,7 +171,7 @@ print(df.columns)
 # Add or subtract the indicators included in teh feature_engineering function as you see fit for highest returns
 
 # Add a feature to UI that allows the usre to modify which indicators to turn on and which to turn off
-features = ['sma_5', 'sma_20', 'rsi_14', 'macd', 'macd_signal', 'stoch_k', 'stoch_d', 'VWAP', 'rolling_vol20', 'volume_z', 'roc5']
+features = ['sma_5', 'sma_20', 'rsi_14', 'macd', 'macd_signal', 'stoch_k', 'stoch_d', 'VWAP', 'rolling_vol20', 'volume_z', 'roc5', 'Williams_%R']
 #dropna() removes rows/columns that contain Not a Number (NaN) values
 df = df.dropna(subset=features + ['label'])  # Remove rows with missing feature or label values
 
