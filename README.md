@@ -1,3 +1,7 @@
+# What this Streamlit app does
+This app is a Stock Pattern Finder that helps users analyze historical stock price data and discover trading patterns using machine learning and technical analysis. It fetches stock data (e.g., from Yahoo Finance), computes a wide range of technical indicators, creates trading signals, and simulates trades to evaluate strategy performance.
+
+
 # Features
 - Stock price pattern detection using ML (Logistic Regression, Random Forest, etc.)
 - Technical indicators: SMA, EMA, MACD, RSI, Bollinger Bands
