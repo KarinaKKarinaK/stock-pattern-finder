@@ -9,6 +9,32 @@ This app is a Stock Pattern Finder that helps users analyze historical stock pri
 - Sentiment analysis from news headlines (NewsAPI + TextBlob)
 - Streamlit web interface for interactive analysis
 
+# Hwo this app works
+1. Data Fetching:
+Downloads historical price data for a selected stock ticker (e.g., NVDA, MSFT, or AAPL).
+
+2. Feature Engineering:
+Calculates technical indicators such as:
+Moving averages (SMA, EMA)
+RSI, MACD, Bollinger Bands, ATR
+Stochastic Oscillator, VWAP, Volatility, Volume Z-score, Rate of Change
+Williams %R (overbought/oversold)
+Candlestick patterns (Doji, Hammer, Engulfing)
+Label Creation:
+Assigns binary labels for supervised learning (e.g., "buy" if the forward return exceeds a threshold).
+
+Model Training:
+Trains a machine learning classifier (Logistic Regression) to predict trading signals based on the engineered features.
+
+Signal Prediction:
+Uses the trained model to generate buy/sell signals.
+
+Backtesting:
+Simulates trades using the predicted signals and calculates returns to evaluate strategy performance.
+
+Visualization:
+Displays results, trade returns, and indicator values for user analysis.
+
 # Pattern Recognition Strategy (ML)
 ## Supervised “is this a good entry now?”
 
