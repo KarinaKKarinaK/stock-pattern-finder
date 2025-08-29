@@ -13,12 +13,7 @@ from src.labels import create_forward_return_labels
 
 # import ta
 # df = ta.add_all_ta_features(df, open="Open", high="High", low="Low", close="Close", volume="Volume", fillna=True)
-# For now this scaffold covers:
 
-# Label creation
-# Feature engineering
-# Model training and prediction
-# Backtesting logic
 
 def create_labels(df, horizon=5, threshold=0.005):
     # Creating binary labels, returns 1 if teh forward return over the next [horizon] days is >= threshold, else 0
