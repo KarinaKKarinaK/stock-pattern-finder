@@ -15,24 +15,25 @@ Downloads historical price data for a selected stock ticker (e.g., NVDA, MSFT, o
 
 2. Feature Engineering:
 Calculates technical indicators such as:
-Moving averages (SMA, EMA)
-RSI, MACD, Bollinger Bands, ATR
-Stochastic Oscillator, VWAP, Volatility, Volume Z-score, Rate of Change
-Williams %R (overbought/oversold)
-Candlestick patterns (Doji, Hammer, Engulfing)
-Label Creation:
+- Moving averages (SMA, EMA)
+- RSI, MACD, Bollinger Bands, ATR
+- Stochastic Oscillator, VWAP, Volatility, Volume Z-score, Rate of Change
+- Williams %R (overbought/oversold)
+- Candlestick patterns (Doji, Hammer, Engulfing)
+
+4. Label Creation:
 Assigns binary labels for supervised learning (e.g., "buy" if the forward return exceeds a threshold).
 
-Model Training:
+5. Model Training:
 Trains a machine learning classifier (Logistic Regression) to predict trading signals based on the engineered features.
 
-Signal Prediction:
+6. Signal Prediction:
 Uses the trained model to generate buy/sell signals.
 
-Backtesting:
+7. Backtesting:
 Simulates trades using the predicted signals and calculates returns to evaluate strategy performance.
 
-Visualization:
+8. Visualization:
 Displays results, trade returns, and indicator values for user analysis.
 
 # Pattern Recognition Strategy (ML)
