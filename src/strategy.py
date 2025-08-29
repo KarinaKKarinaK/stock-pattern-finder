@@ -9,6 +9,8 @@ from sklearn.ensemble import RandomForestClassifier
 import yfinance as yf
 import matplotlib.pyplot as plt
 import pandas_ta as ta
+from src.labels import create_forward_return_labels
+
 # import ta
 # df = ta.add_all_ta_features(df, open="Open", high="High", low="Low", close="Close", volume="Volume", fillna=True)
 # For now this scaffold covers:
@@ -163,6 +165,7 @@ def backtest(df, signals, horizon=5):
 
 # The plan for how to use these:
 df = yf.download("AAPL", start="2022-01-01", end="2023-01-01")
+df = create_forward_return_labels(df, horizon=5, threshold=0.01)
 df = create_labels(df)
 df = feature_engineering(df)
 df.columns = [col[0] for col in df.columns]  # Flattens to 'Close', 'High', etc.
