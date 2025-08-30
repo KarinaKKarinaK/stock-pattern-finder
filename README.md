@@ -112,5 +112,52 @@ The `feature_engineering` function in `src/strategy.py` automatically generates 
 - Using newsapi to fetch news headlines in a given timeframe
 - Using textblob for sentiment analysis of the news
 
-## Roadmap & Planned Features:
-*See `brainstormin_ideas.md` for more details and ongoing
+# GEneral Use Info
+## Project Overview
+
+Stock Pattern Finder is an interactive web app for analyzing historical stock price data, discovering trading patterns, and generating actionable signals using machine learning and technical analysis. The app is designed for both beginners and experienced traders who want to explore quantitative strategies and evaluate their performance.
+
+## How to Use the App
+
+1. **Enter a Stock Ticker:**  
+   Use the sidebar to input a stock symbol (e.g., AAPL, MSFT, NVDA).
+
+2. **Select Date Range:**  
+   Choose the time period for analysis. The app will fetch historical price data for the selected range.
+
+3. **Fetch Data & Visualize:**  
+   Click "Fetch Data" to load and plot the stock’s price history and technical indicators.
+
+4. **Explore Features:**  
+   The app automatically computes a variety of technical indicators (moving averages, RSI, MACD, Williams %R, candlestick patterns, etc.) and displays them for analysis.
+
+5. **Run Pattern Recognition:**  
+   The app trains a machine learning model to detect buy/sell signals based on historical patterns and displays predicted signals.
+
+6. **Backtest Strategies:**  
+   Simulate trades using the predicted signals and review performance metrics such as returns and drawdowns.
+
+7. **Sentiment Analysis (Optional):**  
+   Fetch recent news headlines and analyze sentiment to see how news may impact trading signals.
+
+## Customization
+
+- Users can select which technical indicators to include in the analysis.
+- Thresholds for signal generation and model parameters can be adjusted for personalized strategies.
+- Future updates will allow users to choose investment horizons and simulate portfolio growth.
+
+## Getting Started
+
+1. Clone the repository and install required packages from `requirements.txt`.
+2. Run `streamlit run app.py` in your terminal.
+3. Open the app in your browser and start exploring stock patterns!
+
+## Limitations
+
+- NewsAPI usage is limited by free tier restrictions.
+- Only daily price bars are supported for now.
+- Model predictions are for educational purposes and not financial advice.
+
+---
+
+For more details and future plans, see [`brainstormin_ideas.md`](brainstormin_ideas.md).
