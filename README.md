@@ -111,3 +111,6 @@ The `feature_engineering` function in `src/strategy.py` automatically generates 
 ## Sentiment Analysis
 - Using newsapi to fetch news headlines in a given timeframe
 - Using textblob for sentiment analysis of the news
+
+## Roadmap & Planned Features:
+*See `brainstormin_ideas.md` for more details and ongoing

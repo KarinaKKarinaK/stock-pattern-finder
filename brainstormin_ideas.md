@@ -14,7 +14,3 @@ On that note also maybe: Multi-Horizon Signals
 
 Some analysis stuff:
 -> Add cross-validation, hyperparameter tuning, and performance metrics (accuracy, precision, recall, Sharpe ratio).
-
-
-## Roadmap & Planned Features:
-*See `brainstormin_ideas.md` for more details and ongoing
