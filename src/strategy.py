@@ -205,5 +205,8 @@ def visualize_returns(results):
     plt.grid()
     plt.show()
 
+from src.combined_analysis import merge_sentiment_with_features
+
+df = merge_sentiment_with_features(df, sentiment_dict)
 strategy_analysis(results)
 visualize_returns(results)
