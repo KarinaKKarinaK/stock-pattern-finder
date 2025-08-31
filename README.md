@@ -9,7 +9,7 @@ This app is a Stock Pattern Finder that helps users analyze historical stock pri
 - Sentiment analysis from news headlines (NewsAPI + TextBlob)
 - Streamlit web interface for interactive analysis
 
-# Hwo this app works
+# How this app works
 1. Data Fetching:
 Downloads historical price data for a selected stock ticker (e.g., NVDA, MSFT, or AAPL).
 
