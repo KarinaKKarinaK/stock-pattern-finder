@@ -6,3 +6,5 @@ streamlit
 ta
 textblob 
 requests
+numpy
+pytest
